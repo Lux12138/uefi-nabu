@@ -91,3 +91,5 @@
 
   INF Binaries/nabu/QcomPkg/Drivers/PILDxe/PILDxe.inf
   INF Binaries/nabu/QcomPkg/Drivers/ShmBridgeDxe/ShmBridgeDxeLA.inf
+
+  INF nabuPkg/Drivers/NabuWdtDxe/NabuWdtDxe.inf

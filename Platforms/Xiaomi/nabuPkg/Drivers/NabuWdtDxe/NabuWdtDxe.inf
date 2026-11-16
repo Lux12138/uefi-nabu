@@ -1,0 +1,47 @@
+## @file
+# Nabu Mu-side boot log and APSS watchdog driver.
+#
+# ReadyToBoot: sample PRAM_BASE, write it to a timestamped file on the NABUESP
+# volume (BOOTLOG0/1.TXT via BOOTLOG.TMP + rename), then stamp a new marker.
+# ExitBootServices: arm the SM8150 APSS WDT when NABU_WDT_MODE is 1 or 2;
+# mode 0 performs no MMIO at all.
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = NabuWdtDxe
+  FILE_GUID                      = 7F0B6A52-2C31-4E9B-9E7D-0C5D6A31B7A1
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.1
+  ENTRY_POINT                    = NabuWdtEntry
+
+[Sources]
+  NabuWdtDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiRuntimeServicesTableLib
+  DebugLib
+  IoLib
+  BaseLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  PrintLib
+  ArmLib
+
+[Guids]
+  gEfiEventExitBootServicesGuid
+  gEfiEventBeforeExitBootServicesGuid
+  gEfiEventReadyToBootGuid
+  gEfiFileInfoGuid
+  gEfiFileSystemInfoGuid
+
+[Protocols]
+  gEfiSimpleFileSystemProtocolGuid
+
+[Depex]
+  TRUE

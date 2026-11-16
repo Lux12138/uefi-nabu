@@ -69,6 +69,13 @@
   #
   gQcomPkgTokenSpaceGuid.PcdPlatformType|"LA"
 
+  #
+  # Advanced Logger
+  #
+  gUniXNUPkgTokenSpaceGuid.PcdUniXNUDeviceModel|"nabu"
+  gAdvLoggerPkgTokenSpaceGuid.PcdAdvancedLoggerBase|0x9FF00000
+  gAdvLoggerPkgTokenSpaceGuid.PcdAdvancedLoggerPages|0x80
+
 [LibraryClasses]
   #
   # Memory Libraries
@@ -80,8 +87,65 @@
   #
   ConfigurationMapLib|nabuPkg/Library/ConfigurationMapLib/ConfigurationMapLib.inf
 
+  #
+  # UniXNU
+  #
+  HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
+  FdtLib|MdePkg/Library/BaseFdtLib/BaseFdtLib.inf
+  UniXNULib|UniXNUPkg/Library/UniXNULib/UniXNULib.inf
+  AdvancedLoggerAccessLib|AdvLoggerPkg/Library/AdvancedLoggerAccessLib/AdvancedLoggerAccessLib.inf
+  QrEncoderLib|MsGraphicsPkg/Library/QrEncoderLib/QrEncoderLib.inf
+  AdvancedLoggerHdwPortLib|AdvLoggerPkg/Library/AdvancedLoggerHdwPortLibNull/AdvancedLoggerHdwPortLibNull.inf
+  AssertLib|AdvLoggerPkg/Library/AssertLib/AssertLib.inf
+  VariablePolicyHelperLib|MdeModulePkg/Library/VariablePolicyHelperLib/VariablePolicyHelperLib.inf
+
+[PcdsFeatureFlag]
+  gAdvLoggerPkgTokenSpaceGuid.PcdAdvancedLoggerFixedInRAM|TRUE
+
+[LibraryClasses.common.SEC]
+  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+
+[LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+
+[LibraryClasses.common.DXE_CORE]
+  AdvancedLoggerLib|AdvLoggerPkg/Library/AdvancedLoggerLib/DxeCore/AdvancedLoggerLib.inf
+
+[LibraryClasses.common]
+  AdvancedLoggerLib|AdvLoggerPkg/Library/AdvancedLoggerLib/Dxe/AdvancedLoggerLib.inf
+  DebugLib|AdvLoggerPkg/Library/BaseDebugLibAdvancedLogger/BaseDebugLibAdvancedLogger.inf
+
 [Components]
   #
   # ACPI Tables
   #
   nabu/AcpiTables.inf
+
+  #
+  # Payload filesystem
+  #
+  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
+  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
+  FatPkg/EnhancedFatDxe/Fat.inf
+
+  #
+  # UniXNU boot manager and XNU loader
+  #
+  UniXNUPkg/Application/UniXNU/UniXNU.inf
+  UniXNUPkg/Driver/UniXNUDxe/UniXNUDxe.inf
+  UniXNUPkg/Driver/UniXNURamDiskDxe/UniXNURamDiskDxe.inf
+  DarwinBootPkg/Driver/DarwinBoot.inf
+
+  #
+  # Firmware log exporter
+  #
+  AdvLoggerPkg/AdvancedSerialLogger/Dxe/AdvancedSerialLoggerDxe.inf
+  UniXNUPkg/Driver/AdvancedLogDxe/AdvancedLogDxe.inf
+  #
+  # Nabu APSS watchdog plus the ESP boot letter. The profile comes from the UEFI
+  # variable NabuWdt; NABU_WDT_DEFAULT is only the fallback when it is absent.
+  #
+  nabuPkg/Drivers/NabuWdtDxe/NabuWdtDxe.inf {
+    <BuildOptions>
+      *:*_*_*_CC_FLAGS = -DNABU_WDT_DEFAULT=0
+  }
