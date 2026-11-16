@@ -107,8 +107,10 @@ UniXNU 模块、固件日志导出与 APSS 看门狗。
 - 固件卷 3 MiB，与 sheng 相同，容得下 UniXNU 的模块。
 - `nabu.toml` 的 `header_version = 1` 与 sheng 的 `0` 不同。boot image
   打包器会读这个值；刷机前要对着 nabu 的 bootloader 核对产物头。
-- 本仓库的源码是**板侧实际构建用的那一份**。构建路径内嵌在固件里，
-  可用 `strings` 从 FD 里读出 `/root/merge/uefi-nabu/Build/...` 佐证。
+- 本仓库的源码是**板侧实际构建用的那一份**。构建路径会内嵌进固件：
+  对解压后的 FD 跑 `strings`，能看到形如
+  `<构建根>/Build/nabuPkg/DEBUG_CLANGPDB/AARCH64/.../*.pdb` 的路径，
+  可以据此确认某个固件是由哪棵树构建的。
 
 ## Credits
 
